@@ -6,6 +6,16 @@ public class MiniBank {
     public static void main(String[] args) {
         try (Scanner scanner = new Scanner(System.in)) {
             System.out.println(BANK_INFO);
+            Account[] accounts = {
+                new Account("Riya", 5000),
+                new Account("Aarav"),
+                new Account("Mira", 2500)
+            };
+            accounts[0].deposit(2000);
+            accounts[0].withdraw(3000);
+            for (Account account : accounts) {
+                System.out.println(account.getAccountNumber() + " | " + account.getOwnerName() + " | " + account.getBalance());
+            }
 
             boolean running = true;
             while (running) {
