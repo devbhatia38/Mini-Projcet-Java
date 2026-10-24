@@ -1,3 +1,16 @@
+import static util.Validator.isValidMobile;
+
+import model.Account;
+import model.BankInfo;
+import model.CurrentAccount;
+import model.Customer;
+import model.FixedDepositAccount;
+import model.MenuOption;
+import model.SavingsAccount;
+import model.WithdrawRule;
+import util.Command;
+import util.CommandParser;
+
 import java.util.Scanner;
 
 public class MiniBank {
@@ -27,10 +40,19 @@ public class MiniBank {
             Customer customer = new Customer("Riya", "riya@example.com", "9876543210",
                     new Customer.Address("1 Bank Street", "Anand", "388001"));
             System.out.println("Customer copy: " + customer.clone().getCustomerId());
-            System.out.println("Mobile valid: " + Validator.isValidMobile("9876543210"));
-            System.out.println("Mobile valid: " + Validator.isValidMobile("12345"));
+            System.out.println("Mobile valid: " + isValidMobile("9876543210"));
+            System.out.println("Mobile valid: " + isValidMobile("12345"));
             Command command = CommandParser.parse("DEPOSIT AC0001 500");
             System.out.println(command.type() + " " + command.accountNumber() + " " + command.amount());
+            WithdrawRule anonymousRule = new WithdrawRule() {
+                @Override
+                public boolean allow(Account account, long amount) {
+                    return account.canWithdraw(amount);
+                }
+            };
+            WithdrawRule lambdaRule = (account, amount) -> account.canWithdraw(amount);
+            System.out.println("Withdrawal allowed: " + anonymousRule.allow(accounts[0], 100));
+            System.out.println("Withdrawal allowed: " + lambdaRule.allow(accounts[0], 100));
 
             boolean running = true;
             while (running) {
@@ -84,15 +106,4 @@ public class MiniBank {
         System.out.println("4. Transfer");
         System.out.println("5. Exit");
     }
-}
-
-record BankInfo(String name, String branch) {
-}
-
-enum MenuOption {
-    OPEN_ACCOUNT,
-    DEPOSIT,
-    WITHDRAW,
-    TRANSFER,
-    EXIT
 }

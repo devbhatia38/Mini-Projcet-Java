@@ -1,3 +1,5 @@
+package util;
+
 public final class CommandParser {
     private CommandParser() {
     }

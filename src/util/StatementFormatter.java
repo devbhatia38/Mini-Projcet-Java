@@ -1,3 +1,7 @@
+package util;
+
+import model.Account;
+
 public final class StatementFormatter {
     private StatementFormatter() {
     }
