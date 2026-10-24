@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class Account {
     private static long accountCounter = 1;
     private final String accountNumber;
@@ -44,5 +46,20 @@ public class Account {
 
     public boolean isActive() {
         return active;
+    }
+
+    @Override
+    public String toString() {
+        return accountNumber + " | " + ownerName + " | " + balance + " | " + (active ? "active" : "inactive");
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        return object instanceof Account account && accountNumber.equals(account.accountNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(accountNumber);
     }
 }

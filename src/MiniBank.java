@@ -14,8 +14,13 @@ public class MiniBank {
             accounts[0].deposit(2000);
             accounts[0].withdraw(3000);
             for (Account account : accounts) {
-                System.out.println(account.getAccountNumber() + " | " + account.getOwnerName() + " | " + account.getBalance());
+                System.out.println(account);
             }
+            System.out.println("Accounts equal: " + accounts[0].equals(accounts[1]));
+            System.out.println("Is account: " + (accounts[0] instanceof Account));
+            Customer customer = new Customer("Riya", "riya@example.com", "9876543210",
+                    new Customer.Address("1 Bank Street", "Anand", "388001"));
+            System.out.println("Customer copy: " + customer.clone().getCustomerId());
 
             boolean running = true;
             while (running) {
