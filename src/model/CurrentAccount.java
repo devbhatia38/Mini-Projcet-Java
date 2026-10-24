@@ -15,7 +15,12 @@ public class CurrentAccount extends Account {
 
     @Override
     public boolean canWithdraw(long amount) {
-        return getBalance() - amount >= -overdraftLimit;
+        return amount <= getBalance() + overdraftLimit;
+    }
+
+    @Override
+    protected long availableBalance() {
+        return Math.max(0, getBalance() + overdraftLimit);
     }
 
     public long getOverdraftLimit() {

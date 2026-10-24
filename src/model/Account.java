@@ -1,8 +1,13 @@
 package model;
 
+import exception.AccountNotFoundException;
+import exception.BankException;
+import exception.InsufficientFundsException;
+import exception.InvalidAmountException;
 import model.annotation.Id;
 import model.annotation.Positive;
 import java.util.Objects;
+import java.util.concurrent.locks.ReentrantLock;
 
 public abstract class Account implements Transactable, InterestBearing {
     private static long accountCounter = 1;
@@ -12,6 +17,7 @@ public abstract class Account implements Transactable, InterestBearing {
     @Positive
     private long balance;
     private boolean active;
+    private final ReentrantLock transactionLock = new ReentrantLock();
 
     protected Account(String ownerName, long openingBalance) {
         this.accountNumber = String.format("AC%04d", accountCounter++);
@@ -24,18 +30,54 @@ public abstract class Account implements Transactable, InterestBearing {
         this(ownerName, 0);
     }
 
-    public void deposit(long amount) {
-        if (amount > 0) {
-            balance += amount;
+    public void deposit(long amount) throws InvalidAmountException {
+        if (amount <= 0) {
+            throw new InvalidAmountException("Amount must be greater than zero");
         }
+        balance = Math.addExact(balance, amount);
     }
 
-    public boolean withdraw(long amount) {
-        if (amount <= 0 || !canWithdraw(amount)) {
-            return false;
+    public boolean withdraw(long amount) throws InsufficientFundsException, InvalidAmountException {
+        if (amount <= 0) {
+            throw new InvalidAmountException("Amount must be greater than zero");
+        }
+        if (!canWithdraw(amount)) {
+            throw new InsufficientFundsException("Insufficient funds", Math.max(0, amount - availableBalance()));
         }
         balance -= amount;
         return true;
+    }
+
+    public void transfer(Account to, long amount) throws BankException {
+        if (to == null) {
+            throw new AccountNotFoundException("Destination account was not found");
+        }
+        Account first = accountNumber.compareTo(to.accountNumber) <= 0 ? this : to;
+        Account second = first == this ? to : this;
+        first.transactionLock.lock();
+        second.transactionLock.lock();
+        boolean debited = false;
+        try {
+            withdraw(amount);
+            debited = true;
+            to.deposit(amount);
+        } catch (BankException exception) {
+            if (debited) {
+                balance += amount;
+            }
+            throw exception;
+        } finally {
+            second.transactionLock.unlock();
+            first.transactionLock.unlock();
+        }
+    }
+
+    protected long availableBalance() {
+        return balance;
+    }
+
+    public ReentrantLock getTransactionLock() {
+        return transactionLock;
     }
 
     public abstract double interestRate();

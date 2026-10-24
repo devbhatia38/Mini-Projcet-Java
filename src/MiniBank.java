@@ -8,6 +8,9 @@ import model.FixedDepositAccount;
 import model.MenuOption;
 import model.SavingsAccount;
 import model.WithdrawRule;
+import exception.BankException;
+import exception.InsufficientFundsException;
+import service.BankSession;
 import service.AnnotationValidator;
 import util.Command;
 import util.CommandParser;
@@ -25,8 +28,17 @@ public class MiniBank {
                 new CurrentAccount("Aarav", 0, 5000),
                 new FixedDepositAccount("Mira", 2500)
             };
-            accounts[0].deposit(2000);
-            accounts[0].withdraw(3000);
+            try {
+                accounts[0].deposit(2000);
+                accounts[0].withdraw(3000);
+                accounts[0].withdraw(5000);
+            } catch (InsufficientFundsException exception) {
+                System.out.println("Withdrawal failed: short by " + exception.getShortfall());
+            } catch (BankException exception) {
+                System.out.println("Bank operation failed: " + exception.getMessage());
+            } finally {
+                System.out.println("Account operations complete");
+            }
             for (Account account : accounts) {
                 System.out.println(account);
             }
@@ -58,6 +70,9 @@ public class MiniBank {
             WithdrawRule lambdaRule = (account, amount) -> account.canWithdraw(amount);
             System.out.println("Withdrawal allowed: " + anonymousRule.allow(accounts[0], 100));
             System.out.println("Withdrawal allowed: " + lambdaRule.allow(accounts[0], 100));
+            try (BankSession session = new BankSession()) {
+                System.out.println("Bank session open");
+            }
 
             boolean running = true;
             while (running) {
