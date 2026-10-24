@@ -7,9 +7,13 @@ import exception.InvalidAmountException;
 import model.annotation.Id;
 import model.annotation.Positive;
 import java.util.Objects;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.concurrent.locks.ReentrantLock;
 
-public abstract class Account implements Transactable, InterestBearing {
+public abstract class Account implements Transactable, InterestBearing, Comparable<Account>, Serializable {
+    private static final long serialVersionUID = 1L;
     private static long accountCounter = 1;
     @Id
     private final String accountNumber;
@@ -17,7 +21,7 @@ public abstract class Account implements Transactable, InterestBearing {
     @Positive
     private long balance;
     private boolean active;
-    private final ReentrantLock transactionLock = new ReentrantLock();
+    private transient ReentrantLock transactionLock = new ReentrantLock();
 
     protected Account(String ownerName, long openingBalance) {
         this.accountNumber = String.format("AC%04d", accountCounter++);
@@ -78,6 +82,16 @@ public abstract class Account implements Transactable, InterestBearing {
 
     public ReentrantLock getTransactionLock() {
         return transactionLock;
+    }
+
+    private void readObject(ObjectInputStream input) throws IOException, ClassNotFoundException {
+        input.defaultReadObject();
+        transactionLock = new ReentrantLock();
+    }
+
+    @Override
+    public int compareTo(Account other) {
+        return accountNumber.compareTo(other.accountNumber);
     }
 
     public abstract double interestRate();
