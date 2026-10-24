@@ -30,14 +30,14 @@ public abstract class Account implements Transactable, InterestBearing {
         this(ownerName, 0);
     }
 
-    public void deposit(long amount) throws InvalidAmountException {
+    public synchronized void deposit(long amount) throws InvalidAmountException {
         if (amount <= 0) {
             throw new InvalidAmountException("Amount must be greater than zero");
         }
         balance = Math.addExact(balance, amount);
     }
 
-    public boolean withdraw(long amount) throws InsufficientFundsException, InvalidAmountException {
+    public synchronized boolean withdraw(long amount) throws InsufficientFundsException, InvalidAmountException {
         if (amount <= 0) {
             throw new InvalidAmountException("Amount must be greater than zero");
         }
