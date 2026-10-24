@@ -14,10 +14,9 @@ From the project root, compile the Java sources and start the application:
 
 ```sh
 mkdir -p out
-javac -d out $(find src -name '*.java')
+javac -d out MiniBank.java $(find model service util -name '*.java')
 java -cp out MiniBank
 ```
 
 Account data and transaction logs are written under `data/`. Choose Exit to
-save the latest account state. Run the Java-only test harness with
-`java -cp out BankServiceTest`.
+save the latest account state.

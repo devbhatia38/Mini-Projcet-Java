@@ -1,11 +1,9 @@
 package model;
 
-import exception.AccountNotFoundException;
-import exception.BankException;
-import exception.InsufficientFundsException;
-import exception.InvalidAmountException;
-import model.annotation.Id;
-import model.annotation.Positive;
+import service.AccountNotFoundException;
+import service.BankException;
+import service.InsufficientFundsException;
+import service.InvalidAmountException;
 import java.util.Objects;
 import java.io.IOException;
 import java.io.ObjectInputStream;

@@ -1,4 +1,4 @@
-package exception;
+package service;
 
 public class InsufficientFundsException extends BankException {
     private static final long serialVersionUID = 1L;

@@ -1,7 +1,6 @@
 package model;
 
 import java.io.Serializable;
-import model.annotation.Id;
 
 public class Customer implements Cloneable, Serializable {
     private static final long serialVersionUID = 1L;

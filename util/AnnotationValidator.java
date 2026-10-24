@@ -1,7 +1,7 @@
-package service;
+package util;
 
-import model.annotation.MaxLength;
-import model.annotation.Positive;
+import model.MaxLength;
+import model.Positive;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;

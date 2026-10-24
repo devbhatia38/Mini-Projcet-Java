@@ -1,4 +1,4 @@
-package service;
+package util;
 
 import model.Account;
 import java.io.IOException;

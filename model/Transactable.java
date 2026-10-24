@@ -1,7 +1,7 @@
 package model;
 
-import exception.InsufficientFundsException;
-import exception.InvalidAmountException;
+import service.InsufficientFundsException;
+import service.InvalidAmountException;
 
 public interface Transactable {
     void deposit(long amount) throws InvalidAmountException;

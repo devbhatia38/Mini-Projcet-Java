@@ -1,4 +1,4 @@
-package model.annotation;
+package model;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,6 +7,6 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface MaxLength {
-    int value();
+public @interface Positive {
+    String message() default "must be > 0";
 }
