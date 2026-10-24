@@ -23,7 +23,11 @@ public final class StatePersister {
 
     public static Account[] load(Path file) throws IOException, ClassNotFoundException {
         try (ObjectInputStream input = new ObjectInputStream(Files.newInputStream(file))) {
-            return (Account[]) input.readObject();
+            Account[] accounts = (Account[]) input.readObject();
+            for (Account account : accounts) {
+                Account.reserveAccountNumber(account.getAccountNumber());
+            }
+            return accounts;
         }
     }
 }

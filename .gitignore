@@ -3,6 +3,4 @@
 .vscode/
 out/
 bin/
-out/
-*.jar
 data/

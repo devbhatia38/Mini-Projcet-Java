@@ -1,8 +1,8 @@
 # MiniBank
 
-MiniBank is a console banking application developed one practical at a time for
-Part B of the OOPJ practical list. The current version contains the Part B
-menu shell from Practical 1.
+MiniBank is a console banking application developed for Part B of the OOPJ
+practical list. It supports account creation, deposits, withdrawals, transfers,
+statements, batch deposits, reporting, and saving account data between runs.
 
 ## Requirements
 
@@ -10,13 +10,14 @@ menu shell from Practical 1.
 
 ## Compile and run
 
-From the project root:
+From the project root, compile the Java sources and start the application:
 
 ```sh
 mkdir -p out
-javac -d out src/MiniBank.java
+javac -d out $(find src -name '*.java')
 java -cp out MiniBank
 ```
 
-Choose options 1–4 to see the feature placeholders. Choose 5 to exit. Invalid
-input is rejected and the menu is shown again.
+Account data and transaction logs are written under `data/`. Choose Exit to
+save the latest account state. Run the Java-only test harness with
+`java -cp out BankServiceTest`.

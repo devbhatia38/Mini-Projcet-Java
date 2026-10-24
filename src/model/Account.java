@@ -24,32 +24,52 @@ public abstract class Account implements Transactable, InterestBearing, Comparab
     private transient ReentrantLock transactionLock = new ReentrantLock();
 
     protected Account(String ownerName, long openingBalance) {
-        this.accountNumber = String.format("AC%04d", accountCounter++);
+        this.accountNumber = String.format("AC%04d", nextAccountNumber());
         this.ownerName = ownerName;
         this.balance = openingBalance;
         this.active = true;
+    }
+
+    private static synchronized long nextAccountNumber() {
+        return accountCounter++;
+    }
+
+    public static synchronized void reserveAccountNumber(String accountNumber) {
+        if (accountNumber != null && accountNumber.matches("AC\\d+")) {
+            accountCounter = Math.max(accountCounter, Long.parseLong(accountNumber.substring(2)) + 1);
+        }
     }
 
     protected Account(String ownerName) {
         this(ownerName, 0);
     }
 
-    public synchronized void deposit(long amount) throws InvalidAmountException {
-        if (amount <= 0) {
-            throw new InvalidAmountException("Amount must be greater than zero");
+    public void deposit(long amount) throws InvalidAmountException {
+        transactionLock.lock();
+        try {
+            if (amount <= 0) {
+                throw new InvalidAmountException("Amount must be greater than zero");
+            }
+            balance = Math.addExact(balance, amount);
+        } finally {
+            transactionLock.unlock();
         }
-        balance = Math.addExact(balance, amount);
     }
 
-    public synchronized boolean withdraw(long amount) throws InsufficientFundsException, InvalidAmountException {
-        if (amount <= 0) {
-            throw new InvalidAmountException("Amount must be greater than zero");
+    public boolean withdraw(long amount) throws InsufficientFundsException, InvalidAmountException {
+        transactionLock.lock();
+        try {
+            if (amount <= 0) {
+                throw new InvalidAmountException("Amount must be greater than zero");
+            }
+            if (!canWithdraw(amount)) {
+                throw new InsufficientFundsException("Insufficient funds", Math.max(0, amount - availableBalance()));
+            }
+            balance -= amount;
+            return true;
+        } finally {
+            transactionLock.unlock();
         }
-        if (!canWithdraw(amount)) {
-            throw new InsufficientFundsException("Insufficient funds", Math.max(0, amount - availableBalance()));
-        }
-        balance -= amount;
-        return true;
     }
 
     public void transfer(Account to, long amount) throws BankException {
@@ -62,6 +82,7 @@ public abstract class Account implements Transactable, InterestBearing, Comparab
         second.transactionLock.lock();
         boolean debited = false;
         try {
+            Math.addExact(to.balance, amount);
             withdraw(amount);
             debited = true;
             to.deposit(amount);
@@ -111,7 +132,12 @@ public abstract class Account implements Transactable, InterestBearing, Comparab
     }
 
     public long getBalance() {
-        return balance;
+        transactionLock.lock();
+        try {
+            return balance;
+        } finally {
+            transactionLock.unlock();
+        }
     }
 
     public boolean isActive() {

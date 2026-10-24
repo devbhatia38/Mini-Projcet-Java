@@ -16,6 +16,7 @@ public final class ReportGenerator {
         long deposits = 0;
         long withdrawals = 0;
         StringBuilder report = new StringBuilder();
+        Files.createDirectories(logsFolder);
         try (DirectoryStream<Path> files = Files.newDirectoryStream(logsFolder, "*.log")) {
             for (Path file : files) {
                 if (!Files.isRegularFile(file) || Files.size(file) == 0) {
