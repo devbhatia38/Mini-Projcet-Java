@@ -8,6 +8,7 @@ import model.FixedDepositAccount;
 import model.MenuOption;
 import model.SavingsAccount;
 import model.WithdrawRule;
+import service.AnnotationValidator;
 import util.Command;
 import util.CommandParser;
 
@@ -40,6 +41,10 @@ public class MiniBank {
             Customer customer = new Customer("Riya", "riya@example.com", "9876543210",
                     new Customer.Address("1 Bank Street", "Anand", "388001"));
             System.out.println("Customer copy: " + customer.clone().getCustomerId());
+            Account invalidAccount = new SavingsAccount("Test", -100, 0);
+            for (String error : AnnotationValidator.validate(invalidAccount)) {
+                System.out.println(error);
+            }
             System.out.println("Mobile valid: " + isValidMobile("9876543210"));
             System.out.println("Mobile valid: " + isValidMobile("12345"));
             Command command = CommandParser.parse("DEPOSIT AC0001 500");
