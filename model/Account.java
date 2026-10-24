@@ -1,5 +1,4 @@
 package model;
-
 import service.AccountNotFoundException;
 import service.BankException;
 import service.InsufficientFundsException;

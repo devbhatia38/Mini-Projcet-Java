@@ -1,5 +1,4 @@
 package service;
-
 import model.Account;
 import model.SavingsAccount;
 import util.StatementFormatter;
@@ -13,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
-
 public class BankService {
     private final Repository<Account> accounts = new Repository<>();
     private final Path dataDirectory;

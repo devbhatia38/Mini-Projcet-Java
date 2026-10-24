@@ -1,5 +1,4 @@
 package service;
-
 public final class CommandParser {
     private CommandParser() {
     }

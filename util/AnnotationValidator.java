@@ -1,5 +1,4 @@
 package util;
-
 import model.MaxLength;
 import model.Positive;
 import java.lang.reflect.Field;

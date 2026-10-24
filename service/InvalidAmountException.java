@@ -1,5 +1,4 @@
 package service;
-
 public class InvalidAmountException extends BankException {
     private static final long serialVersionUID = 1L;
 

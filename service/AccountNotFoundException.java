@@ -1,5 +1,4 @@
 package service;
-
 public class AccountNotFoundException extends BankException {
     private static final long serialVersionUID = 1L;
 

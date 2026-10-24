@@ -1,7 +1,5 @@
 package model;
-
 import java.io.Serial;
-
 public class FixedDepositAccount extends Account {
     @Serial
     private static final long serialVersionUID = 1L;

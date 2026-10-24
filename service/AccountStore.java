@@ -1,12 +1,10 @@
 package service;
-
 import model.Account;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 public class AccountStore {
     private final HashMap<String, Account> accounts = new HashMap<>();
     private final ArrayList<String> transactionHistory = new ArrayList<>();

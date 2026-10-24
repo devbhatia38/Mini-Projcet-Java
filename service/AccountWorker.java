@@ -1,8 +1,6 @@
 package service;
-
 import service.InvalidAmountException;
 import model.Account;
-
 public class AccountWorker implements Runnable {
     private final Account account;
     private final int times;

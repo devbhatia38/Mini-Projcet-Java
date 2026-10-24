@@ -1,7 +1,5 @@
 package model;
-
 import java.io.Serializable;
-
 public class Customer implements Cloneable, Serializable {
     private static final long serialVersionUID = 1L;
     private static long customerCounter = 101;

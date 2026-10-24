@@ -1,8 +1,6 @@
 package service;
-
 import java.util.ArrayDeque;
 import java.util.Queue;
-
 public class TransactionBuffer {
     private final Queue<Runnable> transactions = new ArrayDeque<>();
     private boolean finished;

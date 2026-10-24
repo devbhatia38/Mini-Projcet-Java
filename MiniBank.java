@@ -10,7 +10,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
 public class MiniBank {
     private static final BankInfo BANK_INFO = new BankInfo("MiniBank", "Main Branch");
 
