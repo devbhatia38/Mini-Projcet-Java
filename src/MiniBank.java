@@ -21,6 +21,10 @@ public class MiniBank {
             Customer customer = new Customer("Riya", "riya@example.com", "9876543210",
                     new Customer.Address("1 Bank Street", "Anand", "388001"));
             System.out.println("Customer copy: " + customer.clone().getCustomerId());
+            System.out.println("Mobile valid: " + Validator.isValidMobile("9876543210"));
+            System.out.println("Mobile valid: " + Validator.isValidMobile("12345"));
+            Command command = CommandParser.parse("DEPOSIT AC0001 500");
+            System.out.println(command.type() + " " + command.accountNumber() + " " + command.amount());
 
             boolean running = true;
             while (running) {
