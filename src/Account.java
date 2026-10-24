@@ -1,20 +1,20 @@
 import java.util.Objects;
 
-public class Account {
+public abstract class Account {
     private static long accountCounter = 1;
     private final String accountNumber;
     private String ownerName;
     private long balance;
     private boolean active;
 
-    public Account(String ownerName, long openingBalance) {
+    protected Account(String ownerName, long openingBalance) {
         this.accountNumber = String.format("AC%04d", accountCounter++);
         this.ownerName = ownerName;
         this.balance = Math.max(0, openingBalance);
         this.active = true;
     }
 
-    public Account(String ownerName) {
+    protected Account(String ownerName) {
         this(ownerName, 0);
     }
 
@@ -25,11 +25,19 @@ public class Account {
     }
 
     public boolean withdraw(long amount) {
-        if (amount <= 0 || balance < amount) {
+        if (amount <= 0 || !canWithdraw(amount)) {
             return false;
         }
         balance -= amount;
         return true;
+    }
+
+    public abstract double interestRate();
+
+    public abstract boolean canWithdraw(long amount);
+
+    public double monthlyInterest() {
+        return balance * interestRate() / 1200.0;
     }
 
     public String getAccountNumber() {

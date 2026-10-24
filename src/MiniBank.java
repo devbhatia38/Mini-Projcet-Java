@@ -7,9 +7,9 @@ public class MiniBank {
         try (Scanner scanner = new Scanner(System.in)) {
             System.out.println(BANK_INFO);
             Account[] accounts = {
-                new Account("Riya", 5000),
-                new Account("Aarav"),
-                new Account("Mira", 2500)
+                new SavingsAccount("Riya", 5000, 1000),
+                new CurrentAccount("Aarav", 0, 5000),
+                new FixedDepositAccount("Mira", 2500)
             };
             accounts[0].deposit(2000);
             accounts[0].withdraw(3000);
@@ -18,6 +18,12 @@ public class MiniBank {
             }
             System.out.println("Accounts equal: " + accounts[0].equals(accounts[1]));
             System.out.println("Is account: " + (accounts[0] instanceof Account));
+            for (Account account : accounts) {
+                System.out.println(account.getAccountNumber() + " interest rate: " + account.interestRate());
+                if (account instanceof SavingsAccount savingsAccount) {
+                    System.out.println("Minimum balance: " + savingsAccount.getMinBalance());
+                }
+            }
             Customer customer = new Customer("Riya", "riya@example.com", "9876543210",
                     new Customer.Address("1 Bank Street", "Anand", "388001"));
             System.out.println("Customer copy: " + customer.clone().getCustomerId());
